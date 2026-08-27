@@ -41,14 +41,14 @@ class testCrossLanguagePolymorphism(unittest.TestCase):
 			c.current.setId(id)
 			filter.process(c)
 
-	# # test_ParticleCollector(self) causes segfaults atm (need to look into bindings)
-	# def test_ParticleCollector(self):
-	# 	c = crp.Candidate()
-	# 	p = crp.ParticleCollector()
-	# 	p.process(c)
-	# 	c_out = p[0]
-	# 	for c_i in p:
-	# 		c_out = c_i
+	# test_ParticleCollector(self) causes segfaults atm (need to look into bindings)
+	def test_ParticleCollector(self):
+		c = crp.Candidate()
+		p = crp.ParticleCollector()
+		p.process(c)
+		c_out = p[0]
+		for c_i in p:
+			c_out = c_i
 
 	def test_ObserverFeature(self):
 		class CountingFeature(crp.ObserverFeature):
