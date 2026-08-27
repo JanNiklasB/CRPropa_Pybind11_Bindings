@@ -5,7 +5,10 @@ headers_to_bind_file=@headers_to_bind_file@
 root_module_name=@root_module_name@
 compile_commands_file=@compile_commands_file@
 
-# rm -rf $working_dir/bindings && mkdir $working_dir/bindings
+# rm -rf $working_dir/bindings
+if [ ! -d "$working_dir/bindings" ]; then
+	mkdir -p $working_dir/bindings
+fi
 grep -rh "#include" $headers_to_bind_file \
 	| sed -E "s/#include\s+\"/#include </g" \
 	| sed -E s/\"/\>/g \

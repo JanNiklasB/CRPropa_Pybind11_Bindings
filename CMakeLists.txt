@@ -15,6 +15,11 @@ set(Python_FIND_VIRTUALENV "FIRST")
 set(Python_FIND_STRATEGY "LOCATION")
 find_package(Python 3.0 COMPONENTS Interpreter Development NumPy REQUIRED)
 
+set(ENABLE_PYTHON OFF CACHE BOOL "")
+mark_as_advanced(ENABLE_PYTHON)
+set(ENABLE_BUILTIN OFF CACHE BOOL "")
+mark_as_advanced(ENABLE_BUILTIN)
+
 # build crpropa and add resulting libcrpropa.so as library
 if(NOT CRPROPA_SOURCE)
 	if(NOT crpropa_POPULATED)
@@ -30,12 +35,6 @@ if(NOT CRPROPA_SOURCE)
 		# contains .cmake files necessary for finding modules
 		list(APPEND CMAKE_MODULE_PATH "${CRPropa_SOURCE_DIR}/cmake")
 		
-		# may be useful to set some options for CRPropa before building it, e.g.:
-		set(ENABLE_PYTHON OFF CACHE BOOL "")
-		mark_as_advanced(ENABLE_PYTHON)
-		set(ENABLE_BUILTIN OFF CACHE BOOL "")
-		mark_as_advanced(ENABLE_BUILTIN)
-		
 		FetchContent_MakeAvailable(crpropa)
 	endif(NOT crpropa_POPULATED)
 
@@ -45,11 +44,6 @@ if(NOT CRPROPA_SOURCE)
 else()
 
 	add_subdirectory(${CRPROPA_SOURCE} ${CMAKE_CURRENT_BINARY_DIR}/_deps/crpropa-build)
-
-	set(ENABLE_PYTHON OFF CACHE BOOL "")
-	mark_as_advanced(ENABLE_PYTHON)
-	set(ENABLE_BUILTIN OFF CACHE BOOL "")
-	mark_as_advanced(ENABLE_BUILTIN)
 
 	set(CRPropa_SOURCE_DIR ${CRPROPA_SOURCE})
 	set(CRPropa_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/_deps/crpropa-build)
@@ -107,16 +101,21 @@ if(ENABLE_TESTING)
       add_test(NAME ${testName} COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/${testName}.py)
     endfunction()
 
+	function(addTestPyLocal testName)
+      configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test/${testName}.py ${CMAKE_CURRENT_BINARY_DIR}/${testName}.py COPYONLY)
+      add_test(NAME ${testName} COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/${testName}.py)
+    endfunction()
+
     addTestPy(testSimulationExecution)
     addTestPy(testDiffusionSDE)
     addTestPy(testMomentumDiffusion)
-    # addTestPy(testPythonExtension)
+    
+	addTestPyLocal(testPythonExtension)
+	addTestPyLocal(testImports)
 
-	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test/testPythonExtension.py ${CMAKE_CURRENT_BINARY_DIR}/testPythonExtension.py COPYONLY)
-	add_test(NAME testPythonExtension COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/testPythonExtension.py)
 endif(ENABLE_TESTING)
 
-install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/crpropa" DESTINATION "${Python_INSTALL_PACKAGE_DIR}")
+install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/crpropa" DESTINATION "${Python_SITELIB}")
 
 if(ENABLE_PYBIND11_STUBGEN)
 	find_program(PYBIND11_STUBGEN_EXECUTABLE NAMES "pybind11-stubgen")
