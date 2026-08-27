@@ -4,6 +4,7 @@
 #include <CRPropa.h>
 
 #include <string>
+#include <iostream>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -37,6 +38,14 @@ namespace crpropa_bindings{
 			.def(py::init<const cp::Vector3<float>&>())
 			.def(py::init<const T &, const T &, const T &>())
 			.def(py::init<T>())
+			.def(py::init([](py::array& src){
+				auto vec = py::cast<std::vector<T>>(src);
+				if (vec.size() != 3){
+					cout << "Array of size " << vec.size() << " does not fit the required size of 3!" << endl;
+					throw py::index_error();
+				}
+				return new cp::Vector3<T>(vec[0], vec[1], vec[2]);
+			}))
 			// functions:
 			.def("setX", &cp::Vector3<T>::setX)
 			.def("setY", &cp::Vector3<T>::setY)
@@ -87,8 +96,24 @@ theta [0, pi]: zenith angle towards the z axis, 0 pointing in z-direction";
 				);
 			})
 			.def("__len__", [](const cp::Vector3<T>& c){return 3;})
-			.def("__getitem__", [](cp::Vector3<T>& c, const int& idx){return c.data[idx];})
-			.def("__setitem__", [](cp::Vector3<T>& c, const int& idx, T val){c.data[idx]=val;})
+			.def("__getitem__", [](cp::Vector3<T>& c, const int& idx){
+				if (idx==-1)
+					return c.data[2];
+				if (idx==-2)
+					return c.data[1];
+				if (idx>2 || idx<-2)
+					throw py::index_error();
+				return c.data[idx];
+			})
+			.def("__setitem__", [](cp::Vector3<T>& c, const int& idx, T val){
+				if (idx==-1)
+					c.data[2]=val;
+				if (idx==-2)
+					c.data[1]=val;
+				if (idx>2 || idx<-2)
+					throw py::index_error();
+				c.data[idx]=val;
+			})
 			// needed for numpy array compability and other buffer stuff (like very fast no copy instructions)
 			.def_buffer([](cp::Vector3<T>& c) -> py::buffer_info {
 				return py::buffer_info(
