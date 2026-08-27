@@ -11,6 +11,10 @@ set(CRPROPA_SOURCE "" CACHE PATH "An optional local CRPropa source, needs to poi
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+set(Python_FIND_VIRTUALENV "FIRST")
+set(Python_FIND_STRATEGY "LOCATION")
+find_package(Python 3.0 COMPONENTS Interpreter Development NumPy REQUIRED)
+
 # build crpropa and add resulting libcrpropa.so as library
 if(NOT CRPROPA_SOURCE)
 	if(NOT crpropa_POPULATED)
