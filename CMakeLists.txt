@@ -106,7 +106,10 @@ if(ENABLE_TESTING)
     addTestPy(testSimulationExecution)
     addTestPy(testDiffusionSDE)
     addTestPy(testMomentumDiffusion)
-    addTestPy(testPythonExtension)
+    # addTestPy(testPythonExtension)
+
+	configure_file(${CMAKE_CURRENT_SOURCE_DIR}/test/testPythonExtension.py ${CMAKE_CURRENT_BINARY_DIR}/testPythonExtension.py COPYONLY)
+	add_test(NAME testPythonExtension COMMAND ${Python_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/testPythonExtension.py)
 endif(ENABLE_TESTING)
 
 install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/crpropa" DESTINATION "${Python_INSTALL_PACKAGE_DIR}")
