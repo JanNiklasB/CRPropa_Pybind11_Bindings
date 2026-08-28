@@ -6,12 +6,28 @@ It it not possible to use a preinstalled CRPropa since to be able to automatical
 
 ## Install requirements
 
+You need the install requirements of [CRPropa](https://github.com/CRPropa/CRPropa3/blob/master/doc/pages/Installation.md#conda) (you do not need swig) plus the following requirements:
+
 ### conda
 
 ```bash
-conda install -c conda-forge compilers git cmake ninja zlib gperftools fftw hdf5 muparser python numpy pkgconfig pybind11
-pip install cppbinder
+conda install -c conda-forge clang==19.1.7 clangxx==19.1.7 llvm==19.1.7 pybind11 gcc\<15 cmake ninja compilers
 ```
+
+### binder
+
+You also need to install binder, for that you need my custom fork with some additional mappings for the std library (this will take a while to compile!)
+
+```bash
+git clone https://github.com/JanNiklasB/binder.git
+cd binder
+git checkout binder_crpropa
+
+python build.py --llvm-version 19.1.7 --jobs 32
+ln -s $(find build -type f -name binder | grep "" -m 1) $CONDA_PREFIX/bin/binder
+```
+
+I will try to make binder_crpropa to a conda package in the future for linux and macos so installation is easier. 
 
 ## How to build CRPropa with this plugin
 
@@ -23,7 +39,7 @@ cd CRPropa_Pybind11_Bindings
 
 mkdir build && cd build
 cmake .. -G Ninja -D CMAKE_INSTALL_PREFIX=/path/to/your/desired/install/location
-# by default the current master is pulled per fetch content, but you are also able to specify your own repo and tag or local CRPropa source
+# by default the current master (for now a slightly modified version to enable some features) is pulled per fetch content, but you are also able to specify your own repo and tag or local CRPropa source
 cmake --build .
 # installing overwrites the existing crpropa!
 cmake --install .
@@ -31,4 +47,6 @@ cmake --install .
 
 # CMake Variables
 
-- 
+- `CRPROPA_SOURCE` : Path to a local repository of CRPropa, if set disables fetch content option
+- `CRPROPA_GIT_REPOSITORY` : URL to git repository
+- `CRPROPA_GIT_TAG` : Git tag to check out to, can be branch, tag or commit hash
