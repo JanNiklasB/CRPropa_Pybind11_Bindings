@@ -2,18 +2,18 @@ cmake_minimum_required(VERSION 3.14)
 
 project(crpropa_pybind11_bindings)
 
+set(Python_FIND_VIRTUALENV "FIRST")
+set(Python_FIND_STRATEGY "LOCATION")
+find_package(Python 3.0 COMPONENTS Interpreter Development NumPy REQUIRED)
+
 option(ENABLE_PYBIND11_STUBGEN "Generate Pybind11 stubs" On)
 option(ENABLE_TESTING "Build tests and enable test target" On)
-set(Python_INSTALL_PACKAGE_DIR "${Python_SITELIB}" CACHE PATH "folder in which the python package is installed")
+# set(Python_INSTALL_PACKAGE_DIR "${Python_SITELIB}" CACHE PATH "folder in which the python package is installed")
 set(CRPROPA_GIT_REPOSITORY "https://github.com/JanNiklasB/CRPropa3.git" CACHE STRING "The git repository to fetch")
 set(CRPROPA_GIT_TAG "pybind11PluginAdjustments" CACHE STRING "The git tag to check out to")
 set(CRPROPA_SOURCE "" CACHE PATH "An optional local CRPropa source, needs to point to the same folder the CMakeLists.txt is in")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-
-set(Python_FIND_VIRTUALENV "FIRST")
-set(Python_FIND_STRATEGY "LOCATION")
-find_package(Python 3.0 COMPONENTS Interpreter Development NumPy REQUIRED)
 
 set(ENABLE_PYTHON OFF CACHE BOOL "")
 mark_as_advanced(ENABLE_PYTHON)
