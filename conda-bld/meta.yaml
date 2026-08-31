@@ -1,0 +1,73 @@
+package:
+  name: CRPropa_Pybind11_Bindings
+  version: {{ environ.get('CRPROPA_VERSION', 'master') }}
+
+source:
+  - git_url: ../
+    folder: crpropa_bindings
+  - git_url: https://github.com/CRPropa/CRPropa3.git
+    git_rev: 3.3.2
+    folder: crpropa_src
+
+build:
+  script_env:
+    - FAST_WAVES
+    - SIMD_EXTENSIONS
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - {{ compiler('fortran') }}
+    - janniklasb::binder
+    - git
+    - cmake
+    - ninja
+    - pybind11
+    - pkgconfig
+  
+  host:
+    # host only requirements
+    - zlib
+    - gperftools
+    - pybind11-stubgen
+    # crpropa requirements
+    - fftw >3
+    - hdf5
+    - muparser
+    # python requirements
+    - python
+    - numpy >=1.26,<3
+    # add the following only in build step not as run requirement
+    # so we ensure that we do not build against incompatible python versions
+    - matplotlib
+    - astropy
+    - scipy
+
+  run:
+    # crpropa requirements
+    - crpropa::crpropa
+    # cmake required for tests
+    - cmake
+    # python requirements
+    - python
+    - numpy >=1.26,<3
+
+test:
+  imports:
+    - crpropa
+  commands:
+    - testCRPropa
+
+about:
+  home: https://github.com/JanNiklasB/CRPropa_Pybind11_Bindings
+  license: GPL-3.0 license
+  license_file: ../LICENSE
+  license_family: GPL
+  license_url: https://github.com/JanNiklasB/CRPropa_Pybind11_Bindings/blob/main/LICENSE
+  summary: A plugin for CRPropa to generate Pybind11 bindings instead of the default SWIG bindings.
+  description: |
+    A plugin for CRPropa to generate Pybind11 bindings instead of the default SWIG bindings.
+  dev_url: https://github.com/JanNiklasB/CRPropa_Pybind11_Bindings
+  doc_url: https://crpropa.github.io/CRPropa3/
+  doc_source_url: https://github.com/CRPropa/CRPropa3/blob/master/README.md

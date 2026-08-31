@@ -3,3 +3,5 @@ build*
 .vscode
 
 notes.txt
+
+!conda-bld/build.sh
