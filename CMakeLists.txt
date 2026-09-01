@@ -69,7 +69,7 @@ add_custom_target(crpropa-pybind11-config
 		-D project_includes="${crpropa_all_includes}"
 		-D project_extra_sources="${crpropa_pybind_extra_sources}"
 		-D output_dir="${CMAKE_CURRENT_BINARY_DIR}"
-		-D compile_commands_file="${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json"
+		-D compile_commands_file="${CMAKE_BINARY_DIR}/compile_commands.json"
 	USES_TERMINAL
 	DEPENDS crpropa
 )
