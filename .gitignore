@@ -4,4 +4,7 @@ build*
 
 notes.txt
 
+*.code-workspace
+*.log
+
 !conda-bld/build.sh
