@@ -69,7 +69,10 @@ add_custom_target(crpropa-pybind11-config
 		-D project_includes="${crpropa_all_includes}"
 		-D project_extra_sources="${crpropa_pybind_extra_sources}"
 		-D output_dir="${CMAKE_CURRENT_BINARY_DIR}"
-		-D compile_commands_file="${CMAKE_CURRENT_BINARY_DIR}/compile_commands.json"
+		-D compile_commands_file="${CMAKE_BINARY_DIR}/compile_commands.json"
+		-D Python_EXECUTABLE="${Python_EXECUTABLE}"
+		-D Python_INCLUDE_DIRS="${Python_INCLUDE_DIRS}"
+		-D Python_NumPy_INCLUDE_DIRS="${Python_NumPy_INCLUDE_DIRS}"
 	USES_TERMINAL
 	DEPENDS crpropa
 )
@@ -122,6 +125,7 @@ if(ENABLE_PYBIND11_STUBGEN)
 	if(PYBIND11_STUBGEN_EXECUTABLE)
 		message(STATUS "Found pybind11-stubgen at ${PYBIND11_STUBGEN_EXECUTABLE}")
 		install(CODE "execute_process(COMMAND ${PYBIND11_STUBGEN_EXECUTABLE} --ignore-all-errors -o ${Python_SITELIB} crpropa)")
+		install(CODE "execute_process(COMMAND ${PYBIND11_STUBGEN_EXECUTABLE} --ignore-all-errors -o ${Python_SITELIB} crpropa.crpropa)")
 		install(CODE "execute_process(COMMAND echo -- Generated python stubs over pybind11-stubgen for crpropa)")
 	endif(PYBIND11_STUBGEN_EXECUTABLE)
 endif(ENABLE_PYBIND11_STUBGEN)

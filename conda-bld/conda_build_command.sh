@@ -1,0 +1,1 @@
+FAST_WAVES=ON SIMD_EXTENSIONS=native conda build -c janniklasb -c crpropa .
