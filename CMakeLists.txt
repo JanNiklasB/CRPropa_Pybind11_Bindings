@@ -73,7 +73,6 @@ add_custom_target(crpropa-pybind11-config
 		-D Python_EXECUTABLE="${Python_EXECUTABLE}"
 		-D Python_INCLUDE_DIRS="${Python_INCLUDE_DIRS}"
 		-D Python_NumPy_INCLUDE_DIRS="${Python_NumPy_INCLUDE_DIRS}"
-		-D Python_INSTALL_PACKAGE_DIR="${Python_INSTALL_PACKAGE_DIR}"
 	USES_TERMINAL
 	DEPENDS crpropa
 )
