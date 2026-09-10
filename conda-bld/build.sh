@@ -30,4 +30,5 @@ cmake .. -G Ninja \
 cmake --build .
 cp -R crpropa ${SP_DIR}/
 $PREFIX/bin/pybind11-stubgen -o ${SP_DIR} crpropa
+mkdir -p $PREFIX/share/crpropa/test/
 cp *.py $PREFIX/share/crpropa/test/
