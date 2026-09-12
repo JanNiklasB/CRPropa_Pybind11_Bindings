@@ -4,6 +4,7 @@ working_dir=@CMAKE_CURRENT_BINARY_DIR@
 headers_to_bind_file=@headers_to_bind_file@
 root_module_name=@root_module_name@
 compile_commands_file=@compile_commands_file@
+extra_args=$(echo "--extra-arg -I@project_includes@" | sed 's/\;/ --extra-arg -I/g' | sed 's/\\n//g')
 
 # rm -rf $working_dir/bindings
 if [ ! -d "$working_dir/bindings" ]; then
@@ -23,5 +24,6 @@ binder \
 	--annotate-functions \
 	--config $working_dir/binder.cfg \
 	--include-pybind11-stl \
+	$extra_args \
 	$working_dir/includes_for_bindings.h \
 	-p $compile_commands_file

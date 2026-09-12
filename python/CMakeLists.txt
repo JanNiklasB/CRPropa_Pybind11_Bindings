@@ -13,7 +13,6 @@ set(compile_commands_file "" CACHE PATH "path to compile_commands.json")
 
 STRING(REGEX REPLACE " " ";" project_includes "${project_includes}")
 STRING(REGEX REPLACE " " ";" project_extra_sources "${project_extra_sources}")
-message("${project_extra_sources}")
 
 add_library(bound_project SHARED IMPORTED)
 set_target_properties(
