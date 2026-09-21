@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(crpropa_pybind11_bindings VERSION 0.1.0)
+project(crpropa_pybind11_bindings VERSION 0.2.0)
 
 set(Python_FIND_VIRTUALENV "FIRST")
 set(Python_FIND_STRATEGY "LOCATION")
