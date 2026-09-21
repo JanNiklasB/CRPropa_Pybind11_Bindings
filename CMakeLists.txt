@@ -56,31 +56,19 @@ list(APPEND crpropa_all_includes
 	${CRPropa_BINARY_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
-# list(APPEND crpropa_pybind_extra_sources 
-# 	${CMAKE_CURRENT_SOURCE_DIR}/src/Vector3.cpp
-# )
-add_custom_target(crpropa-pybind11-config
-	COMMAND cmake -G ${CMAKE_GENERATOR}
-		-S "${CMAKE_CURRENT_SOURCE_DIR}/python"
-		-B "${CMAKE_CURRENT_BINARY_DIR}/bindings-bld"
-		-D headers_to_bind_file="${CRPropa_SOURCE_DIR}/include/CRPropa.h"
-		-D root_module_name="crpropa"
-		-D project_lib_file="${CRPropa_BINARY_DIR}/libcrpropa.so"
-		-D project_includes="${crpropa_all_includes}"
-		-D project_extra_sources="${crpropa_pybind_extra_sources}"
-		-D output_dir="${CMAKE_CURRENT_BINARY_DIR}"
-		-D compile_commands_file="${CMAKE_BINARY_DIR}/compile_commands.json"
-		-D Python_EXECUTABLE="${Python_EXECUTABLE}"
-		-D Python_INCLUDE_DIRS="${Python_INCLUDE_DIRS}"
-		-D Python_NumPy_INCLUDE_DIRS="${Python_NumPy_INCLUDE_DIRS}"
-	USES_TERMINAL
-	DEPENDS crpropa
+
+find_package(cppbinder)
+cppbinder_add_target( crpropa-python
+	BINARYFOLDER "${CMAKE_CURRENT_BINARY_DIR}/bindings-bld"
+	ROOTMODULE "crpropa"
+	OUTPUTFOLDER "${CMAKE_CURRENT_BINARY_DIR}/crpropa"
+	CONFIGFILE "${CMAKE_CURRENT_SOURCE_DIR}/python/binder.cfg"
+	PROJECTLIB "${CRPropa_BINARY_DIR}/libcrpropa.so"
+	PROJECTINCLUDES "${crpropa_all_includes}"
+	PROJECTEXTRASOURCES "${crpropa_pybind_extra_sources}"
+	HEADERS "${CRPropa_SOURCE_DIR}/include/CRPropa.h"
 )
-add_custom_target(crpropa-pybind11-build ALL
-	COMMAND cmake --build ${CMAKE_CURRENT_BINARY_DIR}/bindings-bld
-	USES_TERMINAL
-	DEPENDS crpropa-pybind11-config
-)
+
 
 # first copy everything from the original python/crpropa and then overwrite it necessary files:
 file(
