@@ -9,7 +9,7 @@ It is not possible to use a preinstalled CRPropa without the source code, since 
 You need the install-requirements of [CRPropa](https://github.com/CRPropa/CRPropa3/blob/master/doc/pages/Installation.md#conda) (you do not need swig) plus the following requirements:
 
 ```bash
-conda install -c conda-forge janniklasb::binder pyvind11 ninja pybind11-stubgen
+conda install -c conda-forge janniklasb::binder pybind11 ninja pybind11-stubgen
 ```
 
 ## How to build CRPropa with this plugin
