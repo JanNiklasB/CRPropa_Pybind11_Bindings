@@ -8,14 +8,13 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/stl_bind.h>
 #include <pybind11/complex.h>
 #include <pybind11/functional.h>
 #include <pybind11/chrono.h>
 #include <pybind11/numpy.h>
 #include <pybind11/pytypes.h>
-#include <pybind11/stl.h>
 #include <pybind11/operators.h>
-
 
 namespace crpropa_bindings{
 
@@ -38,7 +37,7 @@ namespace crpropa_bindings{
 			.def(py::init<const cp::Vector3<float>&>())
 			.def(py::init<const T &, const T &, const T &>())
 			.def(py::init<T>())
-			.def(py::init([](py::array& src){
+			.def(py::init([](py::iterable& src){
 				auto vec = py::cast<std::vector<T>>(src);
 				if (vec.size() != 3){
 					cout << "Array of size " << vec.size() << " does not fit the required size of 3!" << endl;
