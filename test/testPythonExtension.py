@@ -245,6 +245,7 @@ class testKeywordArguments(unittest.TestCase):
 
 class testVector3(unittest.TestCase):
 	def testPublicReferenceAccess(self):
+		# call normally:
 		v = crp.Vector3d(1., 2., 3.)
 		self.assertEqual(v.x, 1.)
 		self.assertEqual(v.y, 2.)
@@ -252,7 +253,37 @@ class testVector3(unittest.TestCase):
 		v.x = 23.
 		self.assertEqual(v.x, 23.)
 
-	# this test fails currently with a seg fault due to how we implement the swig interface
+		# call with iterable:
+		v = crp.Vector3d((1., 2., 3.))
+		self.assertEqual(v.x, 1.)
+		self.assertEqual(v.y, 2.)
+		self.assertEqual(v.z, 3.)
+		v.x = 23.
+		self.assertEqual(v.x, 23.)
+
+		# call with np.array:
+		v = crp.Vector3d(np.array([1., 2., 3.]))
+		self.assertEqual(v.x, 1.)
+		self.assertEqual(v.y, 2.)
+		self.assertEqual(v.z, 3.)
+		v.x = 23.
+		self.assertEqual(v.x, 23.)
+
+	# this test checks if any Sequence[float] can be handed over instead of Vector3 and if Vector3 is still returned where expected
+	def testTypeCaster(self):
+		# test python iterators
+		v = crp.UniformMagneticField((1,2,3)).getField([0,0,0])
+		self.assertEqual(v.x, 1.)
+		self.assertEqual(v.y, 2.)
+		self.assertEqual(v.z, 3.)
+
+		# test numpy arrays
+		v = crp.UniformMagneticField(np.array([1,2,3])).getField((crp.Vector3d(0,0,0)))
+		self.assertEqual(v.x, 1.)
+		self.assertEqual(v.y, 2.)
+		self.assertEqual(v.z, 3.)
+
+	# tests compatibility with some basic numpy and python functions as well as operators
 	def testArrayInterface(self):
 		# this test fails for some combinations of Python version and system
 		v = crp.Vector3d(1., 2., 3.)
